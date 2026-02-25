@@ -5,6 +5,7 @@ export default function PersonalizationPage({ onAddToCart }) {
   const [dob, setDob] = useState("");
   const [result, setResult] = useState(null);
   const [revealed, setRevealed] = useState(false);
+  const [showLetterModal, setShowLetterModal] = useState(false);
   const resultRef = useRef(null);
 
   const getFlower = (dateStr) => {
@@ -25,6 +26,7 @@ export default function PersonalizationPage({ onAddToCart }) {
     setRevealed(false);
     setTimeout(() => {
       setRevealed(true);
+      setShowLetterModal(true);
       resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 100);
   };
@@ -78,11 +80,13 @@ export default function PersonalizationPage({ onAddToCart }) {
               <img src={FLOWER_IMAGES[matchedProduct?.id]} alt={result} style={{ width: "120px", height: "120px", objectFit: "cover" }} className="float-anim" />
               <p className="flower-reveal-subtitle">Your flower is</p>
               <h2 className="flower-reveal-name">{result}</h2>
-            </div>
-
-            <div className="letter-card">
-              <p className="letter-text">{flowerData.letter}</p>
-              <p className="letter-sig">— PetalPrism</p>
+              <button
+                className="btn-primary"
+                style={{ marginTop: "1.5rem" }}
+                onClick={() => setShowLetterModal(true)}
+              >
+                ✦ Read Your Letter
+              </button>
             </div>
 
             {matchedProduct && (
@@ -128,6 +132,23 @@ export default function PersonalizationPage({ onAddToCart }) {
                 </button>
               </div>
             )}
+          </div>
+        )}
+
+        {showLetterModal && flowerData && (
+          <div className="letter-modal-overlay" onClick={() => setShowLetterModal(false)}>
+            <div className="letter-modal" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="letter-modal-close"
+                onClick={() => setShowLetterModal(false)}
+              >
+                ✕
+              </button>
+              <div className="letter-modal-content">
+                <p className="letter-text shimmer">{flowerData.letter}</p>
+                <p className="letter-sig">— PetalPrism</p>
+              </div>
+            </div>
           </div>
         )}
       </div>
